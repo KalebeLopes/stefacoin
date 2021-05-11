@@ -24,7 +24,7 @@ export default class CursoController {
 
     const id = await CursoRepository.incluir(curso);
 
-    return new Mensagem('Aula incluido com sucesso!', {
+    return new Mensagem('Curso incluido com sucesso!', {
       id,
     });
   }
@@ -35,7 +35,7 @@ export default class CursoController {
 
     await CursoRepository.alterar({ id }, curso);
 
-    return new Mensagem('Aula alterado com sucesso!', {
+    return new Mensagem('Curso alterado com sucesso!', {
       id,
     });
   }
@@ -45,7 +45,7 @@ export default class CursoController {
 
     await CursoRepository.excluir({ id });
 
-    return new Mensagem('Aula excluido com sucesso!', {
+    return new Mensagem('Curso excluido com sucesso!', {
       id,
     });
   }
