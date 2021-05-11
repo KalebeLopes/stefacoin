@@ -4,6 +4,8 @@ import config from '../config/config';
 import UnauthorizedException from '../exceptions/unauthorized.exception';
 
 export default function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  if (req.path === '/stefanini/professor' && req.method === 'POST')
+    return next()
   try {
     const authorization = req.headers.authorization;
 
