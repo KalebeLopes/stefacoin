@@ -46,7 +46,7 @@ router.get('/aluno/:id', async (req: Request, res: Response, next: NextFunction)
 
 router.get('/aluno', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const alunos: Aluno[] = await new AlunoController().listar();
+    const alunos: Aluno[] = await new AlunoController().listar({tipo: 2});
     res.json(alunos);
   } catch (e) {
     next(e);
