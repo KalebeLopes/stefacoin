@@ -11,12 +11,10 @@ export default class AlunoController {
 
     let aluno = await AlunoRepository.obterPorId(id)
 
-    if (aluno && aluno.tipo === 2) {
-      delete aluno.senha
-      return aluno
-    } 
+    if(!aluno)
+      throw new BusinessException('Aluno não existe'); 
 
-    throw new BusinessException('Aluno não existe'); 
+    return aluno
   }
 
   async obter(filtro: FilterQuery<Aluno> = {}): Promise<Aluno> {
@@ -36,7 +34,12 @@ export default class AlunoController {
   async incluir(aluno: Aluno) {
     const { nome, formacao, idade, email, senha } = aluno;
     Validador.validarParametros([{ nome }, { formacao }, { idade }, { email }, { senha }]);
-    aluno.tipo = 2
+
+    const user = await this.obter({email: aluno.email})
+
+    if (user && user.email === aluno.email) {
+      throw new BusinessException('Email já cadastrado');
+    }
 
     const id = await AlunoRepository.incluir(aluno);
     return new Mensagem('Aluno incluido com sucesso!', {
@@ -50,9 +53,12 @@ export default class AlunoController {
       { id }, { nome }, { formacao }, { idade }, { email }, { senha }
     ]);
 
-    let getAluno = await this.obterPorId(id)
+    let getAluno = await AlunoRepository.obterPorId(id)
 
-    if (getAluno.email !== aluno.email) {
+    if(!getAluno)
+      throw new BusinessException('Aluno não existe')
+
+    if (getAluno.email !== aluno.email) { // verificar se o email já está em uso
       const alunoWithEmail = await this.obter({email: aluno.email})
       if (alunoWithEmail)
         throw new BusinessException('Email já cadastrado');
@@ -76,7 +82,11 @@ export default class AlunoController {
 
   async excluir(id: number) {
     Validador.validarParametros([{ id }]);
-    await this.obterPorId(id)
+    const getAluno = await AlunoRepository.obterPorId(id)
+
+    if(!getAluno)
+      throw new BusinessException('Aluno não existe');
+
     await AlunoRepository.excluir({ id });
     return new Mensagem('Aluno excluido com sucesso!', {
       id,
