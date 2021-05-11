@@ -5,7 +5,7 @@ import Mensagem from '../utils/mensagem';
 
 const router = express.Router();
 
-router.post('/professor', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/professor', async (req: Request, res: Response, next: NextFunction) => { // ok
   try {
     const mensagem: Mensagem = await new ProfessorController().incluir(req.body);
     res.json(mensagem);
@@ -44,9 +44,9 @@ router.get('/professor/:id', async (req: Request, res: Response, next: NextFunct
   }
 });
 
-router.get('/professor', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/professor', async (req: Request, res: Response, next: NextFunction) => { //ok
   try {
-    const professores: Professor[] = await new ProfessorController().listar();
+    const professores: Professor[] = await new ProfessorController().listar({tipo: 1});
     res.json(professores);
   } catch (e) {
     next(e);
