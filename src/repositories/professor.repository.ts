@@ -13,12 +13,6 @@ class ProfessorRepository extends Repository<Professor> {
   } 
 
   async incluir(professor: Professor) {
-    const user = await super.obter({email: professor.email})
-
-    if (user && user.email === professor.email) {
-      throw new BusinessException('Email já cadastrado');
-    }
-
     professor.senha = Validador.criptografarSenha(professor.senha);
     professor.tipo = TipoUsuario.PROFESSOR;
     return super.incluir(professor);
@@ -30,6 +24,17 @@ class ProfessorRepository extends Repository<Professor> {
     }
     return super.alterar(filtro, professor);
   } 
+
+  async obterPorId(id: number){
+    let aluno = await super.obterPorId(id)
+
+    if (aluno && aluno.tipo === 1) {
+      delete aluno.senha
+      return aluno
+    } 
+
+    return null
+  }
   
 }
 

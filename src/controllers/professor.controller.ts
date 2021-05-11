@@ -11,12 +11,10 @@ export default class ProfessorController {
 
     let professor = await ProfessorRepository.obterPorId(id);
 
-    if (professor && professor.tipo === 1) {
-      delete professor.senha
-      return professor
-    } 
+    if(!professor)
+      throw new BusinessException('Professor não existe'); 
 
-    throw new BusinessException('Parâmetro inválido');
+    return professor
   }
 
   async obter(filtro: FilterQuery<Professor> = {}): Promise<Professor> {
@@ -36,9 +34,13 @@ export default class ProfessorController {
   // #pegabandeira
   async incluir(professor: Professor) { // ok
     const { nome, email, senha } = professor;
-
     Validador.validarParametros([{ nome }, { email }, { senha }]);
-    professor.tipo = 1;
+
+    const user = await this.obter({email: professor.email})
+
+    if (user && user.email === professor.email) {
+      throw new BusinessException('Email já cadastrado');
+    }
 
     const id = await ProfessorRepository.incluir(professor);
 
@@ -49,10 +51,13 @@ export default class ProfessorController {
 
   async alterar(id: number, professor: Professor) { // ok
     const { nome, email, senha } = professor;
-    // console.log('aq')
+
     Validador.validarParametros([{ id }, { nome }, { email }, { senha }]);
 
-    let prof = await this.obterPorId(id)
+    let prof = await ProfessorRepository.obterPorId(id)
+
+    if(!prof)
+      throw new BusinessException('Professor não existe')
 
     if (prof.email !== email) {
       const profWithEmail = await this.obter({email: email})
@@ -78,7 +83,11 @@ export default class ProfessorController {
   async excluir(id: number) { // ok
     Validador.validarParametros([{ id }]);
     
-    await this.obterPorId(id)
+    const professor = await ProfessorRepository.obterPorId(id)
+    
+    if(!professor)
+      throw new BusinessException('Professor não existe')
+
     await ProfessorRepository.excluir({ id });
 
     return new Mensagem('Professor excluido com sucesso!', {
