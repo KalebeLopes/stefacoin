@@ -46,6 +46,9 @@ export default class CursoController {
     console.log(idUltimoCurso)
 
     for(let i: number = 1; i <= aulas.length; i++) {  
+      const { nome, duracao, topicos } = aulas[i-1]
+
+      Validador.validarParametros([{nome}, {duracao}, {topicos}]) // validando os campos obrigatorios de aula
       aulas[i-1].idCurso = idUltimoCurso + 1  // atribuindo o id do novo curso na aula
       aulas[i-1].id = i   // atribuindo os ids das aulas
     }
@@ -62,6 +65,7 @@ export default class CursoController {
   async alterar(id: number, tipo: number, curso: Curso) {
     console.log(tipo)
     const { nome, descricao, aulas, idProfessor } = curso;
+    
     Validador.validarParametros([{ id }, { nome }, { descricao }, { aulas }, { idProfessor }, { tipo }]);
 
     if (tipo !== 1)
