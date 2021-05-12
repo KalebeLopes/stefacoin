@@ -28,7 +28,7 @@ export default class AulaController {
 
     await CursoRepository.alterar({ id: idCurso }, curso);
 
-    return new Mensagem('Aula incluido com sucesso!', {
+    return new Mensagem('Aula incluida com sucesso!', {
       id: aula.id,
       idCurso,
     });
