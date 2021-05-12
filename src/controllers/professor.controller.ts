@@ -1,7 +1,9 @@
 import Professor from '../entities/professor.entity';
+import CursoRepository from '../repositories/curso.repository';
 import ProfessorRepository from '../repositories/professor.repository';
 import { FilterQuery } from '../utils/database/database';
 import BusinessException from '../utils/exceptions/business.exception';
+import UnauthorizedException from '../utils/exceptions/unauthorized.exception';
 import Mensagem from '../utils/mensagem';
 import { Validador } from '../utils/utils';
 
@@ -23,11 +25,17 @@ export default class ProfessorController {
 
   // #pegabandeira 
   async listar(filtro: FilterQuery<Professor> = {}): Promise<Professor[]> { // ok
-    const professoresSerialized = (await ProfessorRepository.listar(filtro)).map((professor) => {
-      delete professor.senha
-      return professor
-    });
-    // console.log(professoresSerialized)
+    const professores = await ProfessorRepository.listar(filtro)
+
+    let professoresSerialized = await Promise.all(
+      professores.map(async (professor) => {
+        professor.cursos = await CursoRepository.listar({ idProfessor: professor.id })
+        delete professor.senha
+        
+        return professor
+      })
+    )
+
     return professoresSerialized
   }
 
@@ -36,9 +44,9 @@ export default class ProfessorController {
     const { nome, email, senha } = professor;
     Validador.validarParametros([{ nome }, { email }, { senha }]);
 
-    const user = await this.obter({email: professor.email})
-
-    if (user && user.email === professor.email) {
+    const user = await ProfessorRepository.obter({email: email.toLowerCase()})
+    
+    if (user) {
       throw new BusinessException('Email já cadastrado');
     }
 
@@ -49,25 +57,29 @@ export default class ProfessorController {
     });
   }
 
-  async alterar(id: number, professor: Professor) { // ok
-    const { nome, email, senha } = professor;
+  async alterar(id: number, idToken: number, professor: Professor) { // ok
+    console.log(idToken)
+    const { nome, senha } = professor;
 
-    Validador.validarParametros([{ id }, { nome }, { email }, { senha }]);
+    Validador.validarParametros([{ id }, { idToken }, { nome }, { senha }]);
+
+    if(idToken != id) 
+      throw new UnauthorizedException('Operação não autorizada')
 
     let prof = await ProfessorRepository.obterPorId(id)
 
     if(!prof)
       throw new BusinessException('Professor não existe')
 
-    if (prof.email !== email) {
-      const profWithEmail = await this.obter({email: email})
-      if (profWithEmail)
-        throw new BusinessException('Email já cadastrado');
-    }
+    // if (prof.email !== email) {  caso queira alterar o email, verifico se ja tem alguem com esse email
+    //   const profWithEmail = await ProfessorRepository.obter({email: email})
+    //   if (profWithEmail)
+    //     throw new BusinessException('Email já cadastrado');
+    // }
 
     const profUpdated = {
       nome: nome,
-      email: email,
+      email: prof.email,
       senha: senha,
       id: prof.id,
       tipo: prof.tipo
@@ -80,13 +92,21 @@ export default class ProfessorController {
 
   }
 
-  async excluir(id: number) { // ok
-    Validador.validarParametros([{ id }]);
+  async excluir(id: number, tipo: number) { // ok
+    console.log(tipo)
+    Validador.validarParametros([{ id }, { tipo }]);
     
+    if(tipo != 1)
+      throw new UnauthorizedException('Operação não autorizada')
+
     const professor = await ProfessorRepository.obterPorId(id)
-    
     if(!professor)
       throw new BusinessException('Professor não existe')
+
+    const professorVinculadoCurso = await CursoRepository.obter({idProfessor: id})
+    if (professorVinculadoCurso)
+      throw new BusinessException('Professor está vinculado a um curso')
+
 
     await ProfessorRepository.excluir({ id });
 

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import ProfessorController from '../controllers/professor.controller';
 import Professor from '../entities/professor.entity';
+import UnauthorizedException from '../utils/exceptions/unauthorized.exception';
 import Mensagem from '../utils/mensagem';
 
 const router = express.Router();
@@ -16,8 +17,11 @@ router.post('/professor', async (req: Request, res: Response, next: NextFunction
 
 router.put('/professor/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // @ts-ignore
+    const idToken = req.uid.id
     const { id } = req.params;
-    const mensagem: Mensagem = await new ProfessorController().alterar(Number(id), req.body);
+
+    const mensagem: Mensagem = await new ProfessorController().alterar(Number(id), Number(idToken), req.body);
     res.json(mensagem);
   } catch (e) {
     next(e);
@@ -26,8 +30,10 @@ router.put('/professor/:id', async (req: Request, res: Response, next: NextFunct
 
 router.delete('/professor/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // @ts-ignore
+    const { tipo } = req.uid
     const { id } = req.params;
-    const mensagem: Mensagem = await new ProfessorController().excluir(Number(id));
+    const mensagem: Mensagem = await new ProfessorController().excluir(Number(id), Number(tipo));
     res.json(mensagem);
   } catch (e) {
     next(e);

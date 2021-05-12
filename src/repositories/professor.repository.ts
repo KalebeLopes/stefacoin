@@ -15,6 +15,8 @@ class ProfessorRepository extends Repository<Professor> {
   async incluir(professor: Professor) {
     professor.senha = Validador.criptografarSenha(professor.senha);
     professor.tipo = TipoUsuario.PROFESSOR;
+    professor.email = professor.email.toLowerCase()
+
     return super.incluir(professor);
   }
 
@@ -26,11 +28,11 @@ class ProfessorRepository extends Repository<Professor> {
   } 
 
   async obterPorId(id: number){
-    let aluno = await super.obterPorId(id)
+    let professor = await super.obterPorId(id)
 
-    if (aluno && aluno.tipo === 1) {
-      delete aluno.senha
-      return aluno
+    if (professor && professor.tipo === 1) {
+      delete professor.senha
+      return professor
     } 
 
     return null
