@@ -32,6 +32,13 @@ export const Validador = {
     }
   },
 
+  validarEmail: (email: string) => {
+    var re = /\S+@\S+\.\S+/;
+      if (re.test(email)) {
+        throw new BusinessException('Email Inválido');
+      }
+  },
+
   validarTamanhoSenha: (senha: string) => {
     if (senha.length < 6)
       throw new BusinessException('A senha deve ter no mínimo 6 caracteres');

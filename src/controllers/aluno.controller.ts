@@ -49,6 +49,8 @@ export default class AlunoController {
       throw new BusinessException('Email já cadastrado');
     }
 
+    // Validador.validarEmail(email.toLowerCase())
+
     const id = await AlunoRepository.incluir(aluno);
     return new Mensagem('Aluno incluido com sucesso!', {
       id,

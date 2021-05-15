@@ -33,4 +33,19 @@ router.put('/aluno/avaliacao/:id', async (req: Request, res: Response, next: Nex
   }
 })
 
+router.get('/aluno/avaliacao/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // @ts-ignore
+    const idToken = req.uid.id
+    // @ts-ignore
+    const { tipo } = req.uid
+    const { id } = req.params
+
+    const mensagem: Mensagem = await new AlunoController().atualizarCurso(req.body, Number(id), Number(idToken), Number(tipo));
+    res.json(mensagem);
+  } catch (e) {
+    next(e);
+  }
+})
+
 export default router
