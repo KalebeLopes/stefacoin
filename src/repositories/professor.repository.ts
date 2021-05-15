@@ -31,7 +31,7 @@ class ProfessorRepository extends Repository<Professor> {
     let professor = await super.obterPorId(id)
 
     if (professor && professor.tipo === 1) {
-      delete professor.senha
+      // delete professor.senha // arrumar isso
       return professor
     } 
 

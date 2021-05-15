@@ -10,10 +10,9 @@ import { Validador } from '../utils/utils';
 export default class AlunoController {
   async login(crendeciais: Usuario): Promise<Login> {
     const { email, senha } = crendeciais;
-
+    
     Validador.validarParametros([{ email }, { senha }]);
     const usuario = await UsuarioRepository.obter({ email: email });
-  
     // #pegabandeira
     if (!usuario) {
       console.log('aq')
@@ -31,6 +30,7 @@ export default class AlunoController {
         email: usuario.email,
         nome: usuario.nome,
         tipo: usuario.tipo,
+        id: usuario.id
       },
       token: accessToken,
       expires: getTime(Date.now() / 1000) + 604800,

@@ -6,31 +6,31 @@ Chegou a hora do desafio final!!!!
 
 Professor:
 
-Listar => listar todos os professores trazendo a informação de quais cursos eles lecionam
+Listar => listar todos os professores trazendo a informação de quais cursos eles lecionam - falta trazer quais cursos eles lecionam
 
-Incluir => incluir um professor seguindo as seguintes regras: Não permitir incluir com e-mail repetido, validar obrigatoriedade dos campos nome, email, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código
+Incluir => incluir um professor seguindo as seguintes regras: Não permitir incluir com e-mail repetido, validar obrigatoriedade dos campos nome, email, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código - ok
 
-Alterar => alterar um professor seguindo as seguintes regras: Não permitir alterar o e-mail, validar obrigatoriedade dos campos nome, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código, somente o próprio professor pode altera seus dados
+Alterar => alterar um professor seguindo as seguintes regras: Não permitir alterar o e-mail, validar obrigatoriedade dos campos nome, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código, somente o próprio professor pode altera seus dados - ok
 
-Excluir => excluir um professor seguindo as seguintes regras: Não permitir que o professor seja excluido caso esteja vinculado a algum curso, somente um professor pode excluir outro professor
+Excluir => excluir um professor seguindo as seguintes regras: Não permitir que o professor seja excluido caso esteja vinculado a algum curso, somente um professor pode excluir outro professor - falta verificar se estar vinculado a algum curso
 
 Aluno:
 
-Listar => listar todos os alunos trazendo a informação de quais cursos eles estão matriculados
+Listar => listar todos os alunos trazendo a informação de quais cursos eles estão matriculados - falta mostrar quais cursos eles estao matriculados
 
-Incluir => incluir um aluno seguindo as seguintes regras: Não permitir incluir com e-mail repetido, validar obrigatoriedade dos campos nome, email, senha, formacao, idade, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código
+Incluir => incluir um aluno seguindo as seguintes regras: Não permitir incluir com e-mail repetido, validar obrigatoriedade dos campos nome, email, senha, formacao, idade, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código - ok
 
-Alterar => alterar um aluno seguindo as seguintes regras: Não permitir alterar o e-mail, validar obrigatoriedade dos campos nome, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código, somente o próprio aluno ou um professor pode altera seus dados
+Alterar => alterar um aluno seguindo as seguintes regras: Não permitir alterar o e-mail, validar obrigatoriedade dos campos nome, senha, criptografar a senha antes de inserir na base utilizando os recursos já disponíveis no código, somente o próprio aluno ou um professor pode altera seus dados - ok
 
-Excluir => excluir um aluno seguindo as seguintes regras: Não permitir que o aluno seja excluido caso esteja matriculado a algum curso, somente um professor pode excluir um aluno
+Excluir => excluir um aluno seguindo as seguintes regras: Não permitir que o aluno seja excluido caso esteja matriculado a algum curso, somente um professor pode excluir um aluno - falta só verificar se está matriculado em algum curso
 
 Matricular Curso => matricular um aluno em um curso seguindo as seguintes regras: Não permitir que o aluno matricule-se mais de uma vez no mesmo curso
 
 Curso:
 
-Listar => listar todos os cursos disponiveis
+Listar => listar todos os cursos disponiveis - aparentemente ok
 
-Incluir => incluir um curso seguindo as seguintes regras: Não permitir incluir com nome repetido, validar obrigatoriedade dos campos nome, professor, aulas e descrição, somente um professor pode incluir um curso
+Incluir => incluir um curso seguindo as seguintes regras: Não permitir incluir com nome repetido, validar obrigatoriedade dos campos nome, professor, aulas e descrição, somente um professor pode incluir um curso - falta definir se preciso informar as aulas na criacao do curso
 
 Alterar => alterar um curso seguindo as seguintes regras: Validar obrigatoriedade dos campos nome, professor, aulas e descrição, somente um professor pode alterar um curso
 

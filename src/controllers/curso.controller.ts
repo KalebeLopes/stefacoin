@@ -8,6 +8,7 @@ import BusinessException from '../utils/exceptions/business.exception';
 import UnauthorizedException from '../utils/exceptions/unauthorized.exception';
 import AulaController from './aula.controller';
 import { formatDurationWithOptions } from 'date-fns/fp';
+import AlunoRepository from '../repositories/aluno.repository';
 
 
 export default class CursoController {
@@ -49,6 +50,7 @@ export default class CursoController {
       const { nome, duracao, topicos } = aulas[i-1]
 
       Validador.validarParametros([{nome}, {duracao}, {topicos}]) // validando os campos obrigatorios de aula
+      aulas[i-1].nome = aulas[i-1].nome.toLowerCase() // salvar nome em minusculo para evitar redundancia
       aulas[i-1].idCurso = idUltimoCurso + 1  // atribuindo o id do novo curso na aula
       aulas[i-1].id = i   // atribuindo os ids das aulas
     }
@@ -79,12 +81,18 @@ export default class CursoController {
     if(!findProfessor)
       throw new BusinessException('Professor não existe')
 
-    if (findCursoById.nome != nome){
+    if (findCursoById.nome != nome.toLowerCase()){
       const findName = await CursoRepository.obter({nome: nome.toLowerCase()})   
-      console.log(findName)
+      // console.log(findName)
       if(findName)
         throw new BusinessException('Curso já existe')
     }
+    // const ultimoIdAula = findCursoById.aulas[aulas.length - 1].id
+    // console.log(ultimoIdAula)
+
+    // findCursoById.aulas.forEach((aula) => {
+    //   aula.nome.toLowerCase()
+    // })
     
     await CursoRepository.alterar({ id }, curso);
 
@@ -93,8 +101,31 @@ export default class CursoController {
     });
   }
 
-  async excluir(id: number) {
+  async excluir(id: number, tipo: number) {
     Validador.validarParametros([{ id }]);
+
+    if (tipo !== 1)
+      throw new UnauthorizedException('Operação não autorizada')
+
+    const curso = await CursoRepository.obterPorId(id)
+    if(!curso)
+      throw new BusinessException('Curso não existe')
+
+    const alunos = await AlunoRepository.listar({tipo: 2})
+    alunos.forEach((aluno) => {
+      aluno.cursos.forEach((curso) => {
+        if(curso.id === id)
+        throw new BusinessException('Existem matrículas no curso')
+      })
+    })
+    // console.log(cursos)
+
+    // if(alunos.length > 0){
+    //   console.log(alunos)
+    //   for(let i=0; i < alunos.length; i++){
+    //     if(alunos[i].cursos)
+    //   }
+    // }
 
     await CursoRepository.excluir({ id });
 

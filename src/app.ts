@@ -6,6 +6,7 @@ import AulaRouter from './routes/aula.router';
 import AuthRouter from './routes/auth.router';
 import CursoRouter from './routes/curso.router';
 import ProfessorRouter from './routes/professor.router';
+import AvaliacaoRouter from './routes/avaliacao.router';
 import Database from './utils/database/database';
 import Exception from './utils/exceptions/exception';
 import auth from './utils/middlewares/auth.middleware';
@@ -58,6 +59,8 @@ class App {
     this.app.use('/stefanini', AulaRouter);
     this.app.use('/stefanini', CursoRouter);
     this.app.use('/stefanini', ProfessorRouter);
+    this.app.use('/stefanini', AvaliacaoRouter);
+    
   }
 
   private authMiddleware() {

@@ -7,7 +7,9 @@ const router = express.Router();
 
 router.post('/aula', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const mensagem: Mensagem = await new AulaController().incluir(req.body);
+    // @ts-ignore
+    const { tipo } = req.uid
+    const mensagem: Mensagem = await new AulaController().incluir(req.body, Number(tipo));
     res.json(mensagem);
   } catch (e) {
     next(e);
@@ -16,8 +18,10 @@ router.post('/aula', async (req: Request, res: Response, next: NextFunction) => 
 
 router.put('/aula/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
-    const mensagem: Mensagem = await new AulaController().alterar(Number(id), req.body);
+    // @ts-ignore
+    const { tipo } = req.uid
+    const { id } = req.params; // id da aula
+    const mensagem: Mensagem = await new AulaController().alterar(Number(id), req.body, Number(tipo));
     res.json(mensagem);
   } catch (e) {
     next(e);
@@ -26,9 +30,11 @@ router.put('/aula/:id', async (req: Request, res: Response, next: NextFunction) 
 
 router.delete('/aula/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // @ts-ignore
+    const { tipo } = req.uid
     const { id } = req.params;
     const { idCurso } = req.query;
-    const aulas: Mensagem = await new AulaController().excluir(Number(id), Number(idCurso));
+    const aulas: Mensagem = await new AulaController().excluir(Number(id), Number(idCurso), Number(tipo));
     res.json(aulas);
   } catch (e) {
     next(e);

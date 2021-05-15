@@ -43,6 +43,7 @@ router.delete('/professor/:id', async (req: Request, res: Response, next: NextFu
 router.get('/professor/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
+    console.log(id)
     const professor: Professor = await new ProfessorController().obterPorId(Number(id));
     res.json(professor);
   } catch (e) {

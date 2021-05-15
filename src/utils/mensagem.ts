@@ -3,7 +3,7 @@ export default class Mensagem {
   data?: any;
   code?: number;
 
-  constructor(mensagem, data = undefined, code = undefined) {
+  constructor(mensagem, data = undefined, code = 200) {
     this.mensagem = mensagem;
     this.data = data;
     this.code = code;

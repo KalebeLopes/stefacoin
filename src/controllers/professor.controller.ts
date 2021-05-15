@@ -12,9 +12,12 @@ export default class ProfessorController {
     Validador.validarParametros([{ id }]);
 
     let professor = await ProfessorRepository.obterPorId(id);
-
     if(!professor)
       throw new BusinessException('Professor não existe'); 
+
+    professor.cursos = await CursoRepository.listar({ idProfessor: professor.id })
+    delete professor.senha
+    // console.log(professor)
 
     return professor
   }
@@ -43,13 +46,14 @@ export default class ProfessorController {
   async incluir(professor: Professor) { // ok
     const { nome, email, senha } = professor;
     Validador.validarParametros([{ nome }, { email }, { senha }]);
+    Validador.validarTamanhoSenha(senha)
 
     const user = await ProfessorRepository.obter({email: email.toLowerCase()})
     
     if (user) {
       throw new BusinessException('Email já cadastrado');
     }
-
+    
     const id = await ProfessorRepository.incluir(professor);
 
     return new Mensagem('Professor incluido com sucesso!', {
@@ -58,18 +62,22 @@ export default class ProfessorController {
   }
 
   async alterar(id: number, idToken: number, professor: Professor) { // ok
-    console.log(idToken)
-    const { nome, senha } = professor;
+    console.log(professor)
+    const { nome, senha, novaSenha } = professor;
 
-    Validador.validarParametros([{ id }, { idToken }, { nome }, { senha }]);
+    Validador.validarParametros([{ id }, { idToken }, { nome }, { senha }, { novaSenha }]);
 
     if(idToken != id) 
       throw new UnauthorizedException('Operação não autorizada')
 
     let prof = await ProfessorRepository.obterPorId(id)
+    console.log(prof)
 
     if(!prof)
       throw new BusinessException('Professor não existe')
+    
+    Validador.validarTamanhoSenha(novaSenha)
+    Validador.validarSenha(senha, prof.senha)
 
     // if (prof.email !== email) {  caso queira alterar o email, verifico se ja tem alguem com esse email
     //   const profWithEmail = await ProfessorRepository.obter({email: email})
@@ -80,7 +88,7 @@ export default class ProfessorController {
     const profUpdated = {
       nome: nome,
       email: prof.email,
-      senha: senha,
+      senha: novaSenha,
       id: prof.id,
       tipo: prof.tipo
     }

@@ -26,10 +26,16 @@ export const Validador = {
 
   validarSenha: (senha: string, senhaAtual: string) => {
     const isValid = bcrypt.compareSync(senha, senhaAtual);
-
+    console.log(isValid)
     if (!isValid) {
       throw new UnauthorizedException('Usuário ou senha inválida.');
     }
+  },
+
+  validarTamanhoSenha: (senha: string) => {
+    if (senha.length < 6)
+      throw new BusinessException('A senha deve ter no mínimo 6 caracteres');
+    
   },
 
   criptografarSenha: (senha: string): string => {

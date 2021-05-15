@@ -13,6 +13,8 @@ class AlunoRepository extends Repository<Aluno> {
   async incluir(aluno: Aluno) {
     aluno.senha = Validador.criptografarSenha(aluno.senha);
     aluno.tipo = TipoUsuario.ALUNO;
+    aluno.email = aluno.email.toLowerCase()
+    aluno.cursos = []
     return super.incluir(aluno);
   }
 
@@ -23,15 +25,21 @@ class AlunoRepository extends Repository<Aluno> {
     return super.alterar(filtro, aluno);
   }
 
-  async obterPorId(id: number){
+  async obterPorId(id: number){ //sem senha
     let aluno = await super.obterPorId(id)
 
     if (aluno && aluno.tipo === 2) {
-      delete aluno.senha
+      // delete aluno.senha
       return aluno
     } 
 
     return null
+  }
+
+  async obterPorIdSenha(id: number){ //sem senha
+    let aluno = await super.obterPorId(id) 
+
+    return aluno
   }
 }
 
