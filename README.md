@@ -1,3 +1,5 @@
+** FUNCIONALIDADES: 
+
 * Professor:
     - Listar -> listar todos os professores trazendo a informação de quais cursos eles lecionam - ok
         - Implementações:
