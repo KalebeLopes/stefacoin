@@ -112,7 +112,7 @@
                 - verificar se o curso existe
                 - verificar se o aluno está matriculado no curso que quer alterar
                 - verificar se o aluno ja avaliou o curso
-            - alterar avaliacao
+            - alterar avaliação:
                 - verificar se não é um professor
                 - verificar se quem está logado é diferente do id passado
                 - verificar se aluno existe
